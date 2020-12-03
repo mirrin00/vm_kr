@@ -86,15 +86,18 @@ if __name__ == "__main__":
     up_str = ''
     for i in range(len(x_i)):
         print(f'Коэффициент слагаемого: {delta_f_i[i][0]}/({h**i} * {math.factorial(i)}) ', end='')
-        #print(f'Коэффициент слагаемого: ', f_i[i][0], '/(', h ** i, ' * ', math.factorial(i), ') ', sep='', end='')
         coef = delta_f_i[i][0]/((h**i) * math.factorial(i))
         up.append(0)
         if len(up) > 1:
             up = [1] + [up[j+1] - up[j]*x_i[i-1] for j in range(len(up) - 1)]
+            if(up_str == '1'):
+                up_str = f'(x{sign_str(-x_i[i])}{abs(x_i[i])})'
+            else:
+                up_str += f'(x{sign_str(-x_i[i])}{abs(x_i[i])})'
         else:
             up = [1]
-        print(up)
-        up_str += f'(x{sign_str(-x_i[i])}{abs(x_i[i])})'
+            up_str = '1'
+
         print('Слагаемое: ', up_str)
         ups.append([0 for j in range(len(x_i)-1-i)] + [e * coef for e in up])
     print('Слагаемые с коэффициентами:')
@@ -108,6 +111,45 @@ if __name__ == "__main__":
     for i in range(len(poly)):
         up_str += f'{sign_str(poly[i])}{abs(poly[i])}*x^{len(poly) - 1 - i}'
     print('Многочлен по методу Ньютона вперёд: ', up_str, sep='')
+
+    print()
+    print('Ньютон назад:')
+    print('x_i:', x_i)
+    print('delta_0_f_i:', f_i)
+    delta_f_i = [f_i]
+    for i in range(len(x_i) - 1):
+        delta_f_i.append([delta_f_i[i][j + 1] - delta_f_i[i][j] for j in range(len(delta_f_i[i]) - 1)])
+        print('delta_', i + 1, '_f_i: ', delta_f_i[i + 1], sep='')
+    h = abs(x_i[0] - x_i[1])
+    ups = []
+    up = []
+    up_str = ''
+    for i in range(len(x_i)):
+        print(f'Коэффициент слагаемого: {delta_f_i[i][-1]}/({h ** i} * {math.factorial(i)}) ', end='')
+        coef = delta_f_i[i][-1] / ((h ** i) * math.factorial(i))
+        up.append(0)
+        if len(up) > 1:
+            up = [1] + [up[j + 1] - up[j] * x_i[-i] for j in range(len(up) - 1)]
+            if(up_str == '1'):
+                up_str = f'(x{sign_str(-x_i[-i])}{abs(x_i[-i])})'
+            else:
+                up_str += f'(x{sign_str(-x_i[-i])}{abs(x_i[-i])})'
+        else:
+            up = [1]
+            up_str = '1'
+        print('Слагаемое: ', up_str)
+        ups.append([0 for j in range(len(x_i) - 1 - i)] + [e * coef for e in up])
+    print('Слагаемые с коэффициентами:')
+    for i in range(len(ups)):
+        up_str = ''
+        for j in range(len(ups[i])):
+            up_str += f'{sign_str(ups[i][j])}{abs(ups[i][j])}*x^{len(ups[i]) - 1 - j}'
+        print('Слагаемое ', i, ': ', up_str, sep='')
+    poly = [sum(up[i] for up in ups) for i in range(len(ups[0]))]
+    up_str = ''
+    for i in range(len(poly)):
+        up_str += f'{sign_str(poly[i])}{abs(poly[i])}*x^{len(poly) - 1 - i}'
+    print('Многочлен по методу Ньютона назад: ', up_str, sep='')
 
 
 
