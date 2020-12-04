@@ -91,9 +91,9 @@ if __name__ == "__main__":
         if len(up) > 1:
             up = [1] + [up[j+1] - up[j]*x_i[i-1] for j in range(len(up) - 1)]
             if(up_str == '1'):
-                up_str = f'(x{sign_str(-x_i[i])}{abs(x_i[i])})'
+                up_str = f'(x{sign_str(-x_i[i-1])}{abs(x_i[i-1])})'
             else:
-                up_str += f'(x{sign_str(-x_i[i])}{abs(x_i[i])})'
+                up_str += f'(x{sign_str(-x_i[i-1])}{abs(x_i[i-1])})'
         else:
             up = [1]
             up_str = '1'
